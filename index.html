@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Futbol Pio</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+ 
+<header class="title"> FutbolPio </header>
+<body>
+ <!-- FORMULARIO DE LOGIN -->
+    <div class="InicialFormContainer"> 
+        <div class="tab-pane fade show active" id="loginFormContainer">
+            <form id="loginForm">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="loginEmail" placeholder="Email" required>
+                        <label for="loginEmail">Email</label>
+                    </div>
+                   <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="loginUserName" placeholder="UserName" required>
+                        <label for="loginUserName">UserName</label>
+                   </div>
+                   <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Contraseña" required>
+                        <label for="loginPassword">Contraseña</label>
+                   </div>
+                   <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+            </form>
+        </div>
+
+ <!-- FORMULARIO DE REGISTRO -->
+        <div class="tab-pane fade" id="registerFormContainer">
+            <form id="registerForm">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="registerName" placeholder="Name" required>
+                    <label for="registerName">Nombre</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="registerEmail" placeholder="Correo electrónico" required>
+                    <label for="registerEmail">Correo electrónico</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="registerPassword" placeholder="Contraseña" required>
+                    <label for="registerPassword">Contraseña</label>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Crear cuenta</button>
+            </form>
+        </div>
+    </div>                  
+</body>
