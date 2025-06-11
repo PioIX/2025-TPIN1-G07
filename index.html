@@ -2,51 +2,45 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Futbol Pio</title>
-    <link href="styles.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Futbol Pio</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
- 
-<header class="title"> FutbolPio </header>
+
 <body>
- <!-- FORMULARIO DE LOGIN -->
-    <div class="InicialFormContainer"> 
-        <div class="tab-pane fade show active" id="loginFormContainer">
+    <header class="header">
+         <h1><span class="futbol">FUTBOL</span><span class="pio">PIO</span></h1>
+    </header>
+
+  <div class="tab-container">
+        <div class="tabs">
+            <button class="tab active" onclick="/*Funcion para cambiar la pestaña*/">Iniciar Sesión</button>
+            <button class="tab" onclick="/*Funcion para cambiar la pestaña**/">Registrarse</button>
+        </div>
+
+        <div class="form-container">
+        <!-- Login Form -->
+        <div class="form-panel" id="login">
             <form id="loginForm">
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="loginEmail" placeholder="Email" required>
-                        <label for="loginEmail">Email</label>
-                    </div>
-                   <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="loginUserName" placeholder="UserName" required>
-                        <label for="loginUserName">UserName</label>
-                   </div>
-                   <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="loginPassword" placeholder="Contraseña" required>
-                        <label for="loginPassword">Contraseña</label>
-                   </div>
-                   <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                        <label for="loginEmail">Email</label><input type="text" class="form-control" id="loginEmail" placeholder="Email" required>
+                        <label for="loginUserName">UserName</label><input type="text" class="form-control" id="loginUserName" placeholder="UserName" required>
+                        <label for="loginPassword">Contraseña</label><input type="password" class="form-control" id="registerPassword" placeholder="Contraseña" required>
+            <button type="submit">Ingresar</button>
             </form>
         </div>
 
- <!-- FORMULARIO DE REGISTRO -->
-        <div class="tab-pane fade" id="registerFormContainer">
+        <!-- Register Form -->
+        <div class="form-panel hidden" id="register">
             <form id="registerForm">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="registerName" placeholder="Name" required>
-                    <label for="registerName">Nombre</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="registerEmail" placeholder="Correo electrónico" required>
-                    <label for="registerEmail">Correo electrónico</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="registerPassword" placeholder="Contraseña" required>
-                    <label for="registerPassword">Contraseña</label>
-                </div>
-                <button type="submit" class="btn btn-success w-100">Crear cuenta</button>
+            <label for="registerName">Nombre</label><input type="text" class="form-control" id="registerName" placeholder="Name" required>
+            <label for="registerEmail">Email</label><input type="email" class="form-control" id="registerEmail" placeholder="Correo electrónico" required>
+            <label for="registerPassword">Contraseña</label><input type="password" placeholder="Contraseña" required />
+            <button type="submit">Crear cuenta</button>
             </form>
         </div>
-    </div>                  
+        </div>
+  </div>
 </body>
+
+</html>
