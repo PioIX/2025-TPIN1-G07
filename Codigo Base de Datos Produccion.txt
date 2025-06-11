@@ -1,0 +1,31 @@
+CREATE TABLE IF NOT EXISTS Usuarios(
+idUser INT AUTO_INCREMENT UNIQUE NOT NULL,
+userName VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password varchar (50) NOT NULL,
+totalTime INT,
+PRIMARY KEY (idUser)
+);
+
+CREATE TABLE IF NOT EXISTS Jugadores(
+idJugador INT AUTO_INCREMENT UNIQUE NOT NULL,
+nombreCompleto VARCHAR (50) NOT NULL,
+pais VARCHAR (50) NOT NULL,
+PRIMARY KEY (idJugador)
+);
+
+CREATE TABLE IF NOT EXISTS Consignas(
+idConsigna INT AUTO_INCREMENT UNIQUE NOT NULL,
+categoria VARCHAR (50) NOT NULL,
+PRIMARY KEY (idConsigna)
+);
+
+CREATE TABLE IF NOT EXISTS JugadoresPorConsigna(
+idJugadorConsigna INT AUTO_INCREMENT UNIQUE NOT NULL,
+idJugador INT,
+idConsigna INT,
+FOREIGN KEY (idJugador) REFERENCES Jugadores(idJugador),
+FOREIGN KEY (idConsigna) REFERENCES Consignas(idConsigna),
+posicionTablaJugador INT,
+PRIMARY KEY (idJugadorConsigna)
+);
