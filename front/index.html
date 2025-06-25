@@ -13,18 +13,18 @@
 
   <div class="tab-container">
     <div class="tabs">
-      <button class="tab active" onclick="showForm('login')">Iniciar Sesión</button>
-      <button class="tab" onclick="showForm('register')">Registrarse</button>
+      <button class="tab active" onclick="showForm('login')">Registrarse</button>
+      <button class="tab" onclick="showForm('register')">Inciar Sesión</button>
     </div>
 
     <div class="form-container">
       <!-- Login Form -->
       <div class="form-panel" id="login">
         <form id="loginForm">
-          <label for="loginEmail">Email</label>
-          <input type="text" id="loginEmail" placeholder="Email" required>
           <label for="loginUserName">UserName</label>
           <input type="text" id="loginUserName" placeholder="UserName" required>
+          <label for="loginEmail">Email</label>
+          <input type="text" id="loginEmail" placeholder="Correo electrónico" required>
           <label for="loginPassword">Contraseña</label>
           <input type="password" id="loginPassword" placeholder="Contraseña" required>
           <button type="submit">Ingresar</button>
