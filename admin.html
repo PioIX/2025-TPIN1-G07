@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Panel Admin</title>
+  <link rel="stylesheet" href="pantallaJuego.css"/>
+</head>
+<body>
+  <h2><span>FUTBOL</span><span>PIO</span></h2>
+  <h3>ADMINISTRAR JUGADORES</h3>
+
+  <table id="adminTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nombre completo</th>
+        <th>País</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="form-add">
+    <input type="number" id="newPosition" placeholder="Posición (1–n)" min="1"/>
+    <input type="text" id="newPlayerName" placeholder="Nombre completo"/>
+    <input type="text" id="newPlayerCountry" placeholder="País"/>
+    <button id="addBtn">Agregar</button>
+  </div>
+
+  <script>
+    // Carga inicial desde localStorage
+    let players = JSON.parse(localStorage.getItem("players")) || [
+      { nombreCompleto: "DIDA", pais: "BRASIL" },
+      { nombreCompleto: "KAKÁ", pais: "BRASIL" },
+      { nombreCompleto: "PAOLO MALDINI", pais: "ITALIA" },
+      { nombreCompleto: "CAFÚ", pais: "BRASIL" },
+      { nombreCompleto: "GENNARO GATTUSO", pais: "ITALIA" },
+      { nombreCompleto: "CLARENCE SEEDORF", pais: "PAÍSES BAJOS" },
+      { nombreCompleto: "ANDREA PIRLO", pais: "ITALIA" },
+      { nombreCompleto: "ALESSANDRO NESTA", pais: "ITALIA" },
+      { nombreCompleto: "ANDRIY SHEVCHENKO", pais: "UCRANIA" },
+      { nombreCompleto: "HERNÁN CRESPO", pais: "ARGENTINA" },
+      // ... otros jugadores ...
+      { nombreCompleto: "GERARD PIQUÉ", pais: "ESPAÑA" }
+    ];
+
+    const tbody = document.querySelector("#adminTable tbody");
+
+    function renderTabla() {
+      tbody.innerHTML = "";
+      players.forEach((p, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i+1}</td>
+          <td contenteditable="true" onblur="editar(${i}, 'nombreCompleto', this.textContent.trim())">
+            ${p.nombreCompleto}
+          </td>
+          <td contenteditable="true" onblur="editar(${i}, 'pais', this.textContent.trim())">
+            ${p.pais}
+          </td>
+          <td>
+            <button onclick="eliminar(${i})">🗑</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      localStorage.setItem("players", JSON.stringify(players));
+    }
+
+    function agregar() {
+      const posInput  = document.getElementById("newPosition").value.trim();
+      const nombre    = document.getElementById("newPlayerName").value.trim();
+      const pais      = document.getElementById("newPlayerCountry").value.trim();
+      const pos       = parseInt(posInput, 10) - 1;
+
+      if (!posInput || isNaN(pos) || pos < 0 || pos > players.length) {
+        alert("Posición inválida");
+        return;
+      }
+      if (!nombre || !pais) {
+        alert("Nombre y País son obligatorios");
+        return;
+      }
+
+      // Inserta en la posición especificada
+      players.splice(pos, 0, { nombreCompleto: nombre, pais: pais });
+      renderTabla();
+
+      // Limpia inputs
+      document.getElementById("newPosition").value = "";
+      document.getElementById("newPlayerName").value = "";
+      document.getElementById("newPlayerCountry").value = "";
+    }
+
+    function eliminar(i) {
+      if (confirm("¿Eliminar este jugador?")) {
+        players.splice(i, 1);
+        renderTabla();
+      }
+    }
+
+    function editar(i, field, value) {
+      players[i][field] = value;
+      renderTabla();
+    }
+
+    document.getElementById("addBtn").addEventListener("click", agregar);
+    renderTabla();
+  </script>
+</body>
+</html>
