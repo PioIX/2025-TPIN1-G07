@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Panel Admin</title>
+  <link rel="stylesheet" href="pantallaJuego.css"/>
+  <style>
+    .admin-container {
+      background-color: #051622;
+      padding: 20px;
+      border: 2px solid #00bfff;
+      border-radius: 10px;
+      width: 98%;
+      max-width: 700px;
+      margin: 40px auto;
+    }
+    #emptyGrid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    #emptyGrid th, #emptyGrid td {
+      border: 1px solid #203040;
+      padding: 8px;
+      color: white;
+      background-color: #09111b;
+      text-align: left;
+      height: 32px;
+    }
+    #emptyGrid th {
+      color: #f5c400;
+    }
+    .form-add {
+      text-align: center;
+    }
+    .form-add input {
+      margin: 4px 0;
+      padding: 10px;
+      width: 100%;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #00bfff;
+      background: #eaf6fb;
+      color: #051622;
+    }
+    .form-add button, .form-select button {
+      margin-top: 4px;
+      background: linear-gradient(90deg, #00bfff 0%, #00cfff 100%);
+      color: #051622;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 0;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #00bfff44;
+      transition: background 0.2s, color 0.2s;
+      width: 100%;
+      min-width: 180px;
+      max-width: 300px;
+      display: block;
+    }
+    .form-add button:hover, .form-select button:hover {
+      background: linear-gradient(90deg, #00cfff 0%, #00bfff 100%);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <h2><span>FUTBOL</span><span>PIO</span></h2>
+    <h3>ADMINISTRAR Usuarios</h3>
+
+    <div class="form-select" style="margin-bottom:20px;">
+      <label for="userSelect" style="color:#f5c400">Seleccionar usuario para modificar/eliminar:</label>
+      <select id="userSelect" style="width:100%;min-width:350px;max-width:100%;margin-bottom:10px;padding:8px;font-size:1rem;"></select>
+      <div style="margin-top:8px; display: flex; gap: 24px; justify-content: center;">
+        <button id="editBtn">Modificar usuario</button>
+        <button id="deleteBtn">Eliminar usuario</button>
+      </div>
+    </div>
+    <div class="form-add" style="margin-bottom:20px;">
+      <label style="color:#f5c400">Agregar usuario nuevo:</label>
+      <input type="text" id="userName" placeholder="Usuario"/>
+      <input type="email" id="email" placeholder="Email"/>
+      <input type="text" id="password" placeholder="Contraseña"/>
+      <div style="margin-top:8px; display: flex; justify-content: center;">
+        <button id="addBtn">Agregar usuario</button>
+      </div>
+    </div>
+    <!-- Tabla eliminada, solo queda el select -->
+  </div>
+
+  <script>
+    const API = "http://localhost:4000";
+    const userSelect = document.getElementById("userSelect");
+    const userNameInput = document.getElementById("userName");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    let usuarios = [];
+
+    async function cargarUsuarios() {
+      try {
+        const res = await fetch(`${API}/usuarios`);
+        let data = await res.json();
+        usuarios = Array.isArray(data) ? data : [];
+        userSelect.innerHTML = "";
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Nuevo usuario...";
+        userSelect.appendChild(defaultOption);
+        usuarios.forEach((u, idx) => {
+          let name = u.userName || "(sin nombre)";
+          let email = u.email || "";
+          let password = u.password || "";
+          const option = document.createElement("option");
+          option.value = idx;
+          option.textContent = `${name} | ${email} | ${password}`;
+          userSelect.appendChild(option);
+        });
+      } catch (e) {
+        userSelect.innerHTML = "<option value=''>Error al cargar usuarios</option>";
+      }
+    }
+
+    userSelect.addEventListener("change", () => {
+      const idx = userSelect.value;
+      if (idx === "") {
+        userNameInput.value = "";
+        emailInput.value = "";
+        passwordInput.value = "";
+        return;
+      }
+      const usuario = usuarios[idx];
+      if (usuario) {
+        userNameInput.value = usuario.userName || "";
+        emailInput.value = usuario.email || "";
+        passwordInput.value = usuario.password || "";
+      }
+    });
+
+    document.getElementById("addBtn").onclick = async () => {
+      const userName = userNameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!userName || !email || !password) return alert("Completa todos los campos");
+      const res = await fetch(`${API}/usuarios`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName, email, password })
+      });
+      const data = await res.json();
+      alert(data.message || data.res);
+      userNameInput.value = "";
+      emailInput.value = "";
+      passwordInput.value = "";
+      await cargarUsuarios();
+    };
+
+    document.getElementById("editBtn").onclick = async () => {
+      const idx = userSelect.value;
+      if (idx === "") return alert("Selecciona un usuario para modificar");
+      const usuarioOriginal = usuarios[idx];
+      if (!usuarioOriginal) return alert("Usuario no encontrado");
+      const userName = userNameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!userName || !email || !password) return alert("Completa todos los campos");
+      // Usar el userName original como identificador para modificar
+      const res = await fetch(`${API}/usuarios/${encodeURIComponent(usuarioOriginal.userName)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName, email, password })
+      });
+      const data = await res.json();
+      alert(data.message || data.res);
+      await cargarUsuarios();
+    };
+
+    document.getElementById("deleteBtn").onclick = async () => {
+      const idx = userSelect.value;
+      if (idx === "") return alert("Selecciona un usuario para eliminar");
+      if (!confirm("¿Seguro que quieres eliminar este usuario?")) return;
+      const usuarioOriginal = usuarios[idx];
+      if (!usuarioOriginal) return alert("Usuario no encontrado");
+      const res = await fetch(`${API}/usuarios/${encodeURIComponent(usuarioOriginal.userName)}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      alert(data.message || data.res);
+      userNameInput.value = "";
+      emailInput.value = "";
+      passwordInput.value = "";
+      await cargarUsuarios();
+    };
+
+    window.addEventListener("DOMContentLoaded", cargarUsuarios);
+  </script>
+</body>
+</html>
+
+

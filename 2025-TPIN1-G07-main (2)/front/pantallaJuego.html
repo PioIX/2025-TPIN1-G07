@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>FUTBOLPIO - Juego</title>
+  <link rel="stylesheet" href="pantallaJuego.css">
+</head>
+<body>
+  <h2><span>FUTBOL</span><span>PIO</span></h2>
+  <h3>FUTBOLPIO - TOP 10<br><em id="subtitle"></em></h3>
+
+  <table id="playerTable">
+    <tbody>
+      <tr><td>1.</td><td id="row0"></td></tr>
+      <tr><td>2.</td><td id="row1"></td></tr>
+      <tr><td>3.</td><td id="row2"></td></tr>
+      <tr><td>4.</td><td id="row3"></td></tr>
+      <tr><td>5.</td><td id="row4"></td></tr>
+      <tr><td>6.</td><td id="row5"></td></tr>
+      <tr><td>7.</td><td id="row6"></td></tr>
+      <tr><td>8.</td><td id="row7"></td></tr>
+      <tr><td>9.</td><td id="row8"></td></tr>
+      <tr><td>10.</td><td id="row9"></td></tr>
+    </tbody>
+  </table>
+<!-- Aquí se mostrará el mensaje -->
+<p id="winMessage" 
+   style="text-align:center; 
+          font-size:1.5rem; 
+          margin-top:1rem; 
+          font-weight:bold;
+          color:#00ff00;">
+</p>
+  <input type="text" id="playerInput" placeholder="Type the footballer here">
+  <button onclick="confirmSurrender()">⚑</button>
+
+  <script>
+    const userId = sessionStorage.getItem("userId");
+    if (userId === "-1") {
+      const b = document.createElement("button");
+      b.textContent = "ADMIN";
+      b.onclick = ()=>location.href='Admin.html';
+      document.body.appendChild(b);
+    }
+  </script>
+
+  <script src="funciones.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

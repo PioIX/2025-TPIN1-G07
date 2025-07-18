@@ -1,0 +1,61 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background-color: #051622;
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+  padding: 2rem;
+}
+
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #00bfff;
+  margin-bottom: 2rem;
+}
+
+/*tabla*/
+table#ranking {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #0b2a3d;
+  border: 2px solid #00cfff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table#ranking thead {
+  background-color: #00334e;
+}
+
+table#ranking thead th {
+  padding: 1rem;
+  font-size: 1.2rem;
+  color: #00bfff;
+  border-bottom: 1px solid #00bfff;
+}
+
+table#ranking tbody td {
+  padding: 0.75rem;
+  font-size: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #00334e;
+}
+
+table#ranking tbody tr:nth-child(even) {
+  background-color: #082636;
+}
+
+@media (max-width: 600px) {
+  table#ranking thead th, 
+  table#ranking tbody td {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
