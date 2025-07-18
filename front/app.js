@@ -8,20 +8,29 @@ function showForm(panelId) {
   document.querySelectorAll(".tab")[index].classList.add("active");
 }
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+async function login() {
   const email = document.getElementById("loginEmail").value;
   const userName = document.getElementById("loginUserName").value;
   const password = document.getElementById("loginPassword").value;
-
+  console.log(email)
   const res = await fetch("http://localhost:4000/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, userName, password })
+    body: JSON.stringify({ email:email, userName: userName, password: password })
   });
   const data = await res.json();
   alert(data.message);
-});
+  if (data.login) {
+    sessionStorage.setItem("userName", data.userName);
+    
+    if (userName.toUpperCase() === "ADMIN") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "pantallaJuego.html";
+    }
+  }
+}
+
 
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -36,4 +45,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   });
   const data = await res.json();
   alert(data.message);
+  if (data.message == "Registro exitoso") {
+    location.href = "pantallaJuego.html"
+  } 
 });
