@@ -7,8 +7,6 @@ let currentConsigna = 0;
 let currentJugadores = [];
 let revealed = Array(10).fill(false);
 let totalPoints = 0;
-let consignasGanadas = 0;
-let rendiciones = 0;
 
 const inputElement = document.getElementById("playerInput");
 const subtitle = document.querySelector("h3 em");
@@ -100,7 +98,7 @@ function checkPlayer() {
       inputElement.value = "";
 
       if (revealed.every(v => v)) {
-        consignasGanadas++;
+        totalPoints += 100; // Suma 100 puntos por ganar consigna
         winMessage.textContent = "¡GANASTE!";
         setTimeout(() => {
           winMessage.textContent = "";
@@ -115,7 +113,7 @@ function checkPlayer() {
 // Rendirse: limpia y muestra respuestas
 function confirmSurrender() {
   if (!confirm("¿Rendirse?")) return;
-  rendiciones++;
+  totalPoints -= 10; // Resta 10 puntos por perder consigna
   limpiarTabla();
   currentJugadores.forEach((j, i) => {
     document.getElementById(`row${i}`).textContent =
@@ -138,29 +136,26 @@ function avanzarConsigna() {
 
 // Guarda puntaje y redirige
 function guardarPuntajeYSalir() {
-  // Calcula el puntaje final: suma 100 por cada consigna ganada, resta 10 por cada rendición, suma los puntos de aciertos individuales
+  // Guarda el puntaje y usuario en localStorage para mostrar en puntaje.html
   const userName = sessionStorage.getItem("userName") || localStorage.getItem("userName");
-  const puntajeFinal = totalPoints + (consignasGanadas * 100) - (rendiciones * 10);
   localStorage.setItem("finalUserName", userName);
-  localStorage.setItem("finalPoints", puntajeFinal);
-  console.log("Puntaje a enviar al backend:", puntajeFinal);
+  localStorage.setItem("finalPoints", totalPoints);
+  // Actualiza el puntaje en la base de datos (sumando al anterior)
   if (userName) {
-    // Obtener los datos del usuario actual de localStorage/sessionStorage
-    const email = localStorage.getItem("email") || sessionStorage.getItem("email") || "";
-    const password = localStorage.getItem("password") || sessionStorage.getItem("password") || "";
-    const datos = { userName, email, password, totalTime: puntajeFinal };
-    console.log("Datos enviados al backend:", datos);
-    fetch(`http://localhost:4000/usuarios/${encodeURIComponent(userName)}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(datos)
-    })
-      .then(response => {
-        window.location.href = "puntaje.html";
-      })
-      .catch(err => {
-        console.error("Error al actualizar puntaje:", err);
-        window.location.href = "puntaje.html";
+    // Primero obtener el puntaje anterior
+    fetch(`http://localhost:4000/usuarios`)
+      .then(res => res.json())
+      .then(users => {
+        const user = users.find(u => u.userName === userName);
+        const prevPoints = user && user.totalTime ? parseInt(user.totalTime) : 0;
+        const newTotal = prevPoints + totalPoints;
+        fetch(`http://localhost:4000/usuarios/${encodeURIComponent(userName)}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userName, totalTime: newTotal })
+        }).then(() => {
+          window.location.href = "puntaje.html";
+        });
       });
   } else {
     window.location.href = "puntaje.html";

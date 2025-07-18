@@ -118,22 +118,26 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
-app.put('/usuarios/:id', async function(req, res) {
+app.put('/usuarios/:id', async (req, res) => {
+  const { userName, email, password, totalTime } = req.body;
+  const userNameOriginal = req.params.id;
   try {
-    console.log('PUT /usuarios/:id', { params: req.params, body: req.body });
-    const query = `
-      UPDATE Usuarios SET 
-        userName='${req.body.userName}',
-        email='${req.body.email}',
-        password='${req.body.password}',
-        totalTime=${req.body.totalTime}
-      WHERE userName='${req.params.id}'
-    `;
-    console.log('Ejecutando query:', query);
-    await realizarQuery(query);
-    res.json({ message: "Usuario actualizado correctamente" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    let setFields = [];
+    if (userName) setFields.push(`userName='${userName}'`);
+    if (email) setFields.push(`email='${email}'`);
+    if (password) setFields.push(`password='${password}'`);
+    if (typeof totalTime !== 'undefined') setFields.push(`totalTime=${parseInt(totalTime)}`);
+    if (setFields.length === 0) return res.json({ message: "No hay datos para actualizar", success: false });
+    const result = await realizarQuery(
+      `UPDATE Usuarios SET ${setFields.join(", ")} WHERE userName='${userNameOriginal}'`
+    );
+    if (result.affectedRows === 0) {
+      return res.json({ message: "No se encontró el usuario para modificar", success: false });
+    }
+    res.json({ message: "Usuario actualizado correctamente", success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al actualizar usuario" });
   }
 });
 
