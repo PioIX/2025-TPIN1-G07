@@ -15,17 +15,22 @@ FutbolPIO es una aplicación web interactiva donde los usuarios compiten en un j
 ## 📁 Estructura del proyecto
 
 ```
-├── public/
+├── front/
 │   ├── index.html              # Pantalla principal
 │   ├── pantallaJuego.html      # Juego interactivo
-│   ├── Admin.html              # Panel admin (gestiona usuarios)
+│   ├── admin.html              # Panel admin (gestiona usuarios)
+│   ├── puntajes.html           # Panel de puntajes (muestra los puntajes al final del juego)
 │   ├── funciones.js            # Funciones JS comunes
 │   ├── app.js                  # JS principal
 │   ├── ranking.js              # Ranking de usuarios
-│   └── pantallaJuego.css       # Estilos principales
-├── modulos/
+│   └── pantallaJuego.css  # Estilos y diseño de la pagina de pantallaJuego.html
+│   └── puntajes.css       # Estilos y diseño de la pagina de puntaje.html
+│   └── styles.css       # Estilos y diseño de la pagina de index.html
+├── back/ modulos/
 │   └── mysql.js                # Conexión y query a MySQL
 ├── index.js                    # Servidor Express
+├── pio.env                   # para entrar desde el colegio
+├── home.env                   # para entrar desde otro sitio
 └── README.md                   # Este archivo
 ```
 
